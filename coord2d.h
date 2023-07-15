@@ -1,5 +1,6 @@
 #ifndef COORD2D_H
 #define COORD2D_H
+#include <iostream>
 
 class coord_2d {
 public:
@@ -7,11 +8,12 @@ public:
     coord_2d operator+(coord_2d& other);
     coord_2d operator-(coord_2d& other);
     coord_2d operator*(double other);
+
+    friend double dot(coord_2d x1, coord_2d x2);
+    friend std::ostream& operator<<(std::ostream& os, const coord_2d& c);
 private:
     double x;
     double y;
 };
-
-double dot(coord_2d x, coord_2d y);
 
 #endif
