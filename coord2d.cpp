@@ -1,8 +1,10 @@
 #include "coord2d.h"
 
+coord_2d::coord_2d(): x(0), y(0)
+{
+}
 
-
-coord_2d::coord_2d(double x, double y): x(x), y(y)
+coord_2d::coord_2d(double x, double y) : x(x), y(y)
 {
 }
 

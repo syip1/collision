@@ -4,6 +4,7 @@
 
 class coord_2d {
 public:
+    coord_2d();
     coord_2d(double x, double y);
     coord_2d operator+(coord_2d& other);
     coord_2d operator-(coord_2d& other);
