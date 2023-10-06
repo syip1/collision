@@ -3,15 +3,18 @@
 #include <vector>
 #include <iostream>
 #include "ball.h"
+#include "wall.h"
 
 
 class engine_naive {
 public:
     void add_ball(Ball b);
+    void add_wall(Wall w);
     double step();
     friend std::ostream& operator<<(std::ostream& os, const engine_naive& c);
 private:
     std::vector<Ball> balls;
+    std::vector<Wall> walls;
     double time = 0;
 };
 

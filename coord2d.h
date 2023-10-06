@@ -11,6 +11,7 @@ public:
     coord_2d operator*(double other);
     bool operator==(coord_2d other);
     friend double dot(coord_2d x1, coord_2d x2);
+    friend double cross(coord_2d x1, coord_2d x2);
     friend std::ostream& operator<<(std::ostream& os, const coord_2d& c);
 private:
     double x;

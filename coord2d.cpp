@@ -33,6 +33,11 @@ double dot(coord_2d x1, coord_2d x2)
     return x1.x*x2.x + x1.y*x2.y;
 }
 
+double cross(coord_2d x1, coord_2d x2)
+{
+    return x1.x*x2.y - x2.x*x1.y;
+}
+
 std::ostream &operator<<(std::ostream &os, const coord_2d& c)
 {
     os << "(" << c.x << "," << c.y << ")";

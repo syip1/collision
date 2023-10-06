@@ -53,17 +53,46 @@ double collide_time(Ball &x, Ball &y)
     }
 }
 
+double collide_time(Ball &x, Wall &y)
+{
+    coord_2d pd = x.pos - y.get_pt1();
+    coord_2d ld = y.get_pt2() - y.get_pt1();
+    double speed = cross(ld, x.vel);
+    if (speed == 0) {
+        // Moves in parallel to wall
+        return DBL_MAX;
+    }
+    double t = cross(pd, ld) / speed;
+    if (speed < 0) {
+        // Moves in opposite direction to wall
+        return DBL_MAX;
+    }
+    // Backtrack ball radius
+    double cos = dot(x.vel, ld) / dot(ld, ld);
+    double sin = sqrt(1 - cos*cos);
+    double backtrack = x.r / (sin * sqrt(dot(x.vel,x.vel)));
+    return t - backtrack;
+}
+
 void collide(Ball &x, Ball &y)
 {
     // Assume coef of restituion = 1 and mass equal
     coord_2d pd = x.pos - y.pos;
-    // Keep velocity parallel, transfer velocity perpendicular
+    // Keep velocity perpendicular, transfer velocity parallel
     coord_2d xvpar = pd * (dot(x.vel, pd) / dot(pd, pd));
     coord_2d yvpar = pd * (dot(y.vel, pd) / dot(pd, pd));
     coord_2d xvperp = x.vel - xvpar;
     coord_2d yvperp = y.vel - yvpar;
-    x.vel = xvpar + yvperp;
-    y.vel = yvpar + xvperp;
+    x.vel = yvpar + xvperp;
+    y.vel = xvpar + yvperp;
+}
+
+void collide(Ball &x, Wall &y)
+{
+    coord_2d ld = y.get_pt2() - y.get_pt1();
+    coord_2d xvpar = ld * (dot(x.vel, ld) / dot(ld, ld));
+    coord_2d xvperp = x.vel - xvpar;
+    x.vel = xvpar - xvperp;
 }
 
 std::ostream &operator<<(std::ostream &os, const Ball &c)
