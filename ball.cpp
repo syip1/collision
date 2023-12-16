@@ -2,6 +2,43 @@
 #include <iostream>
 #include <cfloat>
 #include <cmath>
+#include <vector>
+#include <algorithm>
+
+std::vector<float> buildCircle(coord_2d centre, float radius, int vCount)
+{
+    float angle = 8 * atan(1) / vCount;
+
+    int triangleCount = vCount - 2;
+
+    std::vector<std::vector<float>> temp;
+    // positions
+    for (int i = 0; i < vCount; i++)
+    {
+        float currentAngle = angle * i;
+        float x = radius * cos(currentAngle);
+        float y = radius * sin(currentAngle);
+        float z = 0.0f;
+
+        temp.push_back({ (float)centre.x+x,(float)centre.y+y,z });
+    }
+
+    std::vector<float> vertices;
+
+    for (int i = 0; i < triangleCount; i++)
+    {
+        vertices.push_back(temp[0][0]);
+        vertices.push_back(temp[0][1]);
+        vertices.push_back(temp[0][2]);
+        vertices.push_back(temp[i + 1][0]);
+        vertices.push_back(temp[i + 1][1]);
+        vertices.push_back(temp[i + 1][2]);
+        vertices.push_back(temp[i + 2][0]);
+        vertices.push_back(temp[i + 2][1]);
+        vertices.push_back(temp[i + 2][2]);
+    }
+    return vertices;
+}
 
 Ball::Ball(): pos(coord_2d(0,0)), vel(coord_2d(0,0)), r(0)
 {
@@ -26,6 +63,23 @@ void Ball::update_pos(double new_time)
 coord_2d Ball::get_vel() const
 {
     return vel;
+}
+
+std::vector<float> Ball::draw() const
+{
+    std::vector<float> ret = buildCircle(pos, r, nvertices);
+    // Add velocity
+    ret.push_back(pos.x + 1);
+    ret.push_back(pos.y + 1);
+    ret.push_back(0);
+    ret.push_back(pos.x - 1);
+    ret.push_back(pos.y - 1);
+    ret.push_back(0);
+    float factor = pow(std::max(2 * r * r / dot(vel, vel), 1.0), 0.5);
+    ret.push_back(pos.x + vel.x * factor);
+    ret.push_back(pos.y + vel.y * factor);
+    ret.push_back(0);
+    return ret;
 }
 
 double collide_time(Ball &x, Ball &y)
@@ -100,3 +154,5 @@ std::ostream &operator<<(std::ostream &os, const Ball &c)
     os << "Position: " << c.pos << ", Velocity: " << c.vel << "Radius: " << c.r << std::endl;
     return os;
 }
+
+
